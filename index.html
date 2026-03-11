@@ -163,13 +163,6 @@
     <button data-filter="commercial" class="filter-btn">Commercial</button>
     <button data-filter="residential" class="filter-btn">Residential</button>
   </div>
-
-  <div class="site-description">
-    "We have gardens all over the Boston area. Explore our different sites and
-    learn more about the communities they serve."
-  </div>
-  <span class="site-status">Status: N/A</span>
-</div>
   
    <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHmB2XzQZl6SUUPrPq2KzifXnryeddfk0&callback=initMap"
@@ -244,17 +237,6 @@
           });
         });
 
-        // Optional: click anywhere on map (not just markers)
-        map.addListener("click", (e) => {
-          // For a real app: find nearest site / check if inside your area
-          // For demo: just show coordinates
-          const tempSite = {
-            name: "Our gardens",
-            description:
-             "We have gardens all over the Boston area. Explore our different sites and learn more about the communities they serve."
-          };
-          showSiteDetails(tempSite);
-        });
 
         sites.forEach((site) => {
            if (!site.type) return;
