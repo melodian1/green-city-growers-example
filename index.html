@@ -203,6 +203,34 @@
           };
           showSiteDetails(tempSite);
         });
+
+        sites.forEach((site) => {
+          let iconUrl;
+        
+          if (site.type === "residential") {
+            iconUrl = "residential.png";
+          } else if (site.type === "commercial") {
+            iconUrl = "commercial.png";
+          } else {
+            iconUrl = null; // fall back to default
+          }
+        
+          const marker = new google.maps.Marker({
+            position: site.position,
+            map: map,
+            title: site.name,
+            icon: iconUrl
+              ? {
+                  url: iconUrl,
+                  scaledSize: new google.maps.Size(32, 32), // adjust to your image
+                }
+              : undefined,
+          });
+        
+          marker.addListener("click", () => {
+            showSiteDetails(site);
+          });
+        });
       }
 
       function showSiteDetails(site) {
