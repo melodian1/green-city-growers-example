@@ -173,6 +173,14 @@
           description: "The home of Green City Growers. Located in Somerville, MA.",
           status: "Live",
         },
+         {
+          id: 5,
+          name: "Madison Park Technical Vocational High School",
+          type: "School",
+          position: { lat: 42.33197552203007, lng: -71.09045194003089},
+          description: "Students in the Madison Park Technical Vocational High School Special Education program debuted a Fork Farm hydroponic garden this past summer.",
+          status: "Live",
+        }
       ];
 
       function initMap() {
@@ -218,6 +226,8 @@
             iconUrl = "residential.png";
           } else if (site.type === "Commercial") {
             iconUrl = "commercial.png";
+          } else if (site.type === "School") {
+            iconUrl = "school.png";
           } else {
             iconUrl = null; // fall back to default
           }
