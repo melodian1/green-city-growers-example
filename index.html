@@ -78,9 +78,21 @@
 
   .site-description {
     margin-bottom: 16px;
+    margin: 0 0 0.75rem; /* smaller, controlled spacing */
     color: var(--gcg-white);
     white-space: pre-line; /* turns \n into visible line breaks */
   }
+
+  .image-row {
+  display: flex;
+  align-items: flex-start; /* align image with first line of text */
+  gap: 0.5rem;            /* space between icon and text */
+  margin-bottom: 0.75rem;
+}
+
+.image-row p {
+  margin: 0;              /* no extra margin inside row */
+}
 
   .site-image {
   max-width: 100%;
@@ -205,20 +217,23 @@
             The Kensington, located in Chinatown in downtown Boston, installed a Grobrix indoor vegetable-growing wall just outside their apartment gym. 
             The Cove, located in Hingham, MA, installed six raised beds in its outdoor engagement area near the pool.
           </p>
-      
-          <img
-            src="trophy.png"
-            alt="LEED Gold trophy"
-            style="max-width: 50px; border-radius: 4px; margin-top: 10px;"
-          />
-      
-          <p>
-            Our garden’s high-quality local food production contributed to The Kensington’s LEED Gold certification, 
-            cementing their status as a place where building a greener future and a greener city are prioritized. 
-            The Cove’s outdoor gardens also support their environmental stewardship and help create a biodiverse 
-            environment in their shared outdoor space.
-          </p>
-      
+
+      <div class="image-row">
+        <img
+          src="trophy.png"
+          alt="LEED Gold trophy"
+          class="trophy-icon"
+        />
+        <p>
+          Our garden’s high-quality local food production contributed to The Kensington’s
+          LEED Gold certification, cementing their status as a place where building a greener
+          future and a greener city are prioritized. The Cove’s outdoor gardens also support
+          their environmental stewardship and help create a biodiverse environment in their
+          shared outdoor space.
+        </p>
+        
+      </div>
+          
           <p>
             <strong>Read more:</strong>
             <a href="https://greencitygrowers.com/success-stories/the-kensington-and-the-cove/" target="_blank">
