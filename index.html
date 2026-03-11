@@ -79,6 +79,14 @@
   .site-description {
     margin-bottom: 16px;
     color: var(--gcg-white);
+    white-space: pre-line; /* turns \n into visible line breaks */
+  }
+
+  .site-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  display: block;
   }
 
   .site-status {
@@ -175,6 +183,7 @@
         position: { lat: 42.34686667880631, lng: -71.09675646330778 },
         description: "Read more: https://www.newsweek.com/future-urban-farming-sits-along-fenways-green-monster-1837844",
         status: "Live",
+        image: "fenwaygardens.jpg",
       },
       {
         id: 2,
@@ -189,7 +198,9 @@
         name: "The Kensington",
         type: "Residential",
         position: { lat: 42.35198999214532, lng: -71.06327887045808},
-        description: "From the city to the shore, these multi-family residences are using their gardens as alternative gathering spaces for their communities. The Kensington, located in Chinatown in downtown Boston, installed a Grobrix indoor vegetable-growing wall just outside their apartment gym. The Cove, located in Hingham, MA, installed six raised beds in its outdoor engagement area near the pool.\nRead more: https://greencitygrowers.com/success-stories/the-kensington-and-the-cove/",
+        description: "From the city to the shore, these multi-family residences are using their gardens as alternative gathering spaces for their communities. 
+          The Kensington, located in Chinatown in downtown Boston, installed a Grobrix indoor vegetable-growing wall just outside their apartment gym. The Cove, located in Hingham, MA, installed six raised beds in its outdoor engagement area near the pool.\n\n"+
+      "Read more: https://greencitygrowers.com/success-stories/the-kensington-and-the-cove/",
         status: "Live",
       },
       {
