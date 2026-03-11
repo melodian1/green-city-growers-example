@@ -267,6 +267,10 @@
           markers.push({ marker, site });
         });
 
+         // CLICKING ON EMPTY MAP → RESET SIDE PANEL
+  map.addListener("click", () => {
+    showOverviewText();
+  });
         
       }
 
