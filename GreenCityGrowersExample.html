@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<style>
+  :root {
+    --gcg-dark-green: #314c3f;
+    --gcg-yellow: #f3e96d;
+    --gcg-yellow-text: #f1e56a;
+    --gcg-title-light: #f7f1a5;
+    --gcg-peach: #f2a98c;
+    --gcg-white: #ffffff;
+  }
+
+  body, html {
+    margin: 0;
+    height: 100%;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--gcg-dark-green);
+    color: var(--gcg-white);
+  }
+
+  /* Top bar like the screenshot */
+  .top-bar {
+    background-color: var(--gcg-dark-green);
+    color: var(--gcg-yellow-text);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .top-bar .logo {
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gcg-yellow);
+  }
+
+  .top-bar nav a {
+    color: var(--gcg-yellow-text);
+    text-decoration: none;
+    margin-left: 24px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 13px;
+  }
+
+  .top-bar nav a:hover {
+    color: var(--gcg-peach);
+  }
+
+  #container {
+    display: flex;
+    height: calc(100vh - 64px); /* 64px = approx top bar height */
+  }
+
+  #side-panel {
+    width: 320px;
+    max-width: 35%;
+    background: rgba(16, 32, 26, 0.97); /* deep overlay */
+    color: var(--gcg-title-light);
+    padding: 20px;
+    box-sizing: border-box;
+    border-right: 2px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .site-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--gcg-title-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .site-description {
+    margin-bottom: 16px;
+    color: var(--gcg-white);
+  }
+
+  .site-status {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: var(--gcg-peach);
+    color: #2b2b2b;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Accent bar similar to the “BLOG” underline */
+  .accent-bar {
+    width: 120px;
+    height: 4px;
+    background-color: var(--gcg-peach);
+    border-radius: 10px;
+    margin: 10px 0 20px 0;
+  }
+
+  #map {
+    flex: 1;
+  }
+</style>
+
+<body>
+  <header class="top-bar">
+    <div class="logo">GREEN CITY GROWERS</div>
+    <nav>
+      <a href="#">Company</a>
+      <a href="#">Products &amp; Services</a>
+      <a href="#">Who We Serve</a>
+      <a href="#">Learn</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <div id="container">
+    <div id="side-panel">
+      <div class="site-title">Click a location</div>
+      <div class="accent-bar"></div>
+      <div class="site-description">
+        Site details will appear here.
+      </div>
+      <span class="site-status">Status: N/A</span>
+    </div>
+    <div id="map"></div>
+  </div>
+
+   <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHmB2XzQZl6SUUPrPq2KzifXnryeddfk0&callback=initMap"
+      async
+      defer
+    ></script>
+
+    <script>
+      let map;
+
+      // Example data for specific sites (normally from a database / API)
+      const sites = [
+        {
+          id: 1,
+          name: "Fenway Farms",
+          position: { lat: 42.34686667880631, lng: -71.09675646330778 },
+          description: "Read more: https://www.newsweek.com/future-urban-farming-sits-along-fenways-green-monster-1837844",
+          status: "Live",
+        },
+        {
+          id: 2,
+          name: "Osborn Triangle",
+          position: { lat: 42.36178047475023, lng: -71.09382715960147 },
+          description: "Home to some of the leading pharmaceutical companies, Osborn Triangle is a premier office and lab complex located in Kendall Square’s life science hub in Cambridge, MA. \nRead more: https://greencitygrowers.com/success-stories/osborn-triangle/",
+          status: "Live",
+        },
+      ];
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat:  42.359958, lng: -71.084066 },
+          zoom: 13,
+          mapTypeId: "satellite",
+        });
+
+        // Add markers for each site
+        sites.forEach((site) => {
+          const marker = new google.maps.Marker({
+            position: site.position,
+            map: map,
+            title: site.name,
+          });
+
+          // When you click a marker, update the side panel
+          marker.addListener("click", () => {
+            showSiteDetails(site);
+          });
+        });
+
+        // Optional: click anywhere on map (not just markers)
+        map.addListener("click", (e) => {
+          // For a real app: find nearest site / check if inside your area
+          // For demo: just show coordinates
+          const tempSite = {
+            name: "Our gardens",
+            description:
+              "You clicked at: " +
+              e.latLng.lat().toFixed(5) +
+              ", " +
+              e.latLng.lng().toFixed(5)
+          };
+          showSiteDetails(tempSite);
+        });
+      }
+
+      function showSiteDetails(site) {
+        const panel = document.getElementById("side-panel");
+        panel.innerHTML = `
+          <div class="site-title">${site.name}</div>
+          <div class="site-description">${site.description || ""}</div>
+          <div><strong>Status:</strong> ${site.status || "N/A"}</div>
+        `;
+      }
+
+      function showSiteDetails(site) {
+  const descriptionHtml = (site.description || "").replace(/\n/g, "<br>");
+
+  const panel = document.getElementById("side-panel");
+  panel.innerHTML = `
+    <div class="site-title">${site.name}</div>
+    <div class="accent-bar"></div>
+    <div class="site-description">${descriptionHtml}</div>
+    <span class="site-status">${site.status || "N/A"}</span>
+  `;
+}
+      
+    </script>
+
+    
+</body>
+
+</html>
