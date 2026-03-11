@@ -169,7 +169,8 @@
   </div>
     
 </div>
-  </div>
+
+     <div id="map"></div>
   
    <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHmB2XzQZl6SUUPrPq2KzifXnryeddfk0&callback=initMap"
@@ -231,19 +232,6 @@
         });
 
         // Add markers for each site
-        sites.forEach((site) => {
-          const marker = new google.maps.Marker({
-            position: site.position,
-            map: map,
-            title: site.name,
-          });
-
-          // When you click a marker, update the side panel
-          marker.addListener("click", () => {
-            showSiteDetails(site);
-          });
-        });
-
 
         sites.forEach((site) => {
            if (!site.type) return;
