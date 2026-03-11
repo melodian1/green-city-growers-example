@@ -269,6 +269,7 @@
       },
       {
         id: 4,
+        type: "HQ",
         name: "Headquarters",
         position: { lat: 42.37627441687818, lng: -71.09259116048692},
         description: "The home of Green City Growers. Located in Somerville, MA.",
@@ -336,6 +337,8 @@
           iconUrl = "commercial.png";
         } else if (site.type === "School") {
           iconUrl = "school.png";
+        } else if (site.type === "HQ") {
+          iconUrl = "star.png";
         }
 
         const marker = new google.maps.Marker({
