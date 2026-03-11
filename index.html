@@ -220,6 +220,8 @@
         });
 
         sites.forEach((site) => {
+           if (!site.type) return;
+          
           let iconUrl;
         
           if (site.type === "Residential") {
@@ -231,22 +233,21 @@
           } else {
             iconUrl = null; // fall back to default
           }
-        
-          const marker = new google.maps.Marker({
-            position: site.position,
-            map: map,
-            title: site.name,
-            icon: iconUrl
-              ? {
-                  url: iconUrl,
-                  scaledSize: new google.maps.Size(32, 32), // adjust to your image
-                }
-              : undefined,
-          });
-        
-          marker.addListener("click", () => {
-            showSiteDetails(site);
-          });
+
+          
+         const marker = new google.maps.Marker({
+    position: site.position,
+    map,
+    title: site.name,
+    icon: {
+      url: iconUrl,
+      scaledSize: new google.maps.Size(40, 40), // or 32, 32
+    },
+  });
+
+  marker.addListener("click", () => {
+    showSiteDetails(site);
+  });
         });
       }
 
