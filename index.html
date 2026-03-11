@@ -224,6 +224,8 @@
         }
       ];
 
+      let markers = [];
+      
       function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
           center: { lat:  42.359958, lng: -71.084066 },
@@ -262,7 +264,10 @@
   marker.addListener("click", () => {
     showSiteDetails(site);
   });
+          markers.push({ marker, site });
         });
+
+        
       }
 
       function showSiteDetails(site) {
