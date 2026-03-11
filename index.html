@@ -110,6 +110,30 @@
   #map {
     flex: 1;
   }
+
+  .filters {
+    margin: 0.75rem 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  
+  .filter-btn {
+    background: transparent;
+    border-radius: 999px;
+    border: 1px solid #f2a98c;
+    color: #f2a98c;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  
+  .filter-btn.active {
+    background: #f2a98c;
+    color: #2c4645;
+  }
 </style>
 
 <body>
@@ -253,16 +277,6 @@
         });
       }
 
-      
-      function showSiteDetails(site) {
-        const panel = document.getElementById("side-panel");
-        panel.innerHTML = `
-          <div class="site-title">${site.name}</div>
-          <div class="site-description">${site.description || ""}</div>
-          <div><strong>Status:</strong> ${site.status || "N/A"}</div>
-        `;
-      }
-
       function showSiteDetails(site) {
   const descriptionHtml = (site.description || "").replace(/\n/g, "<br>");
 
@@ -273,6 +287,47 @@
     <div class="site-description">${descriptionHtml}</div>
     <span class="site-status">${site.status || "N/A"}</span>
   `;
+}
+
+      function setupFilters() {
+  const buttons = document.querySelectorAll(".filter-btn");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // visual active state
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const type = btn.dataset.filter; // "all", "school", "commercial", ...
+
+      filterMarkers(type);
+    });
+  });
+}
+
+function filterMarkers(type) {
+  markers.forEach(({ marker, site }) => {
+    const shouldShow = type === "all" || site.type === type;
+    marker.setVisible(shouldShow);
+  });
+
+  // Optionally update side panel text when toggling
+  if (type === "all") {
+    showOverviewText();
+  } else {
+    // e.g. "Showing all School sites"
+    document.querySelector(".site-title").textContent = "Our Gardens";
+    document.querySelector(".site-description").textContent =
+      `Showing all ${type.charAt(0).toUpperCase() + type.slice(1)} sites.`;
+    document.querySelector(".site-status").textContent = "Status: N/A";
+  }
+}
+
+function showOverviewText() {
+  document.querySelector(".site-title").textContent = "Our Gardens";
+  document.querySelector(".site-description").textContent =
+    '"We have gardens all over the Boston area. Explore our different sites and learn more about the communities they serve."';
+  document.querySelector(".site-status").textContent = "Status: N/A";
 }
       
     </script>
