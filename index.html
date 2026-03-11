@@ -92,10 +92,8 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-     font-family: "Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 1.05rem;         /* matches their --font-size--medium */
-  line-height: 1.55;
-  color: #2c4645;             /* their contrast color */
+    font-family: "Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.55;
   }
 
   /* Accent bar similar to the “BLOG” underline */
@@ -151,185 +149,208 @@
   </header>
 
   <div id="container">
-  <div id="side-panel">
-  <div class="site-title">Our Gardens</div>
-  <div class="accent-bar"></div>
+    <div id="side-panel">
+      <!-- Will be filled by showOverviewText() on load -->
+    </div>
 
-  <div class="site-description">
-    We have gardens all over the Boston area. Explore our different sites and
-    learn more about the communities they serve.
+    <div id="map"></div>
   </div>
-
-      <!-- FILTER BUTTONS -->
-  <div id="filters" class="filters">
-    <button data-filter="all" class="filter-btn active">All</button>
-    <button data-filter="school" class="filter-btn">Schools</button>
-    <button data-filter="commercial" class="filter-btn">Commercial</button>
-    <button data-filter="residential" class="filter-btn">Residential</button>
-  </div>
-    
-</div>
-
-     <div id="map"></div>
   
-   <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHmB2XzQZl6SUUPrPq2KzifXnryeddfk0&callback=initMap"
-      async
-      defer
-    ></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHmB2XzQZl6SUUPrPq2KzifXnryeddfk0&callback=initMap&loading=async"
+    async
+    defer
+  ></script>
 
-    <script>
-      let map;
+  <script>
+    let map;
+    let markers = [];
 
-      // Example data for specific sites (normally from a database / API)
-      const sites = [
-        {
-          id: 1,
-          name: "Fenway Farms",
-          type: "Commercial",
-          position: { lat: 42.34686667880631, lng: -71.09675646330778 },
-          description: "Read more: https://www.newsweek.com/future-urban-farming-sits-along-fenways-green-monster-1837844",
-          status: "Live",
-        },
-        {
-          id: 2,
-          name: "Osborn Triangle",
-          type: "Commercial",
-          position: { lat: 42.36178047475023, lng: -71.09382715960147 },
-          description: "Home to some of the leading pharmaceutical companies, Osborn Triangle is a premier office and lab complex located in Kendall Square’s life science hub in Cambridge, MA. \nRead more: https://greencitygrowers.com/success-stories/osborn-triangle/",
-          status: "Live",
-        },
-        {
-          id: 3,
-          name: "The Kensington",
-          type: "Residential",
-          position: { lat: 42.35198999214532, lng: -71.06327887045808},
-          description: "From the city to the shore, these multi-family residences are using their gardens as alternative gathering spaces for their communities. The Kensington, located in Chinatown in downtown Boston, installed a Grobrix indoor vegetable-growing wall just outside their apartment gym. The Cove, located in Hingham, MA, installed six raised beds in its outdoor engagement area near the pool. Read more: https://greencitygrowers.com/success-stories/the-kensington-and-the-cove/",
-          status: "Live",
-        },
-         {
-          id: 4,
-          name: "Headquarters",
-          position: { lat: 42.37627441687818, lng: -71.09259116048692},
-          description: "The home of Green City Growers. Located in Somerville, MA.",
-          status: "Live",
-        },
-         {
-          id: 5,
-          name: "Madison Park Technical Vocational High School",
-          type: "School",
-          position: { lat: 42.33197552203007, lng: -71.09045194003089},
-          description: "Students in the Madison Park Technical Vocational High School Special Education program debuted a Fork Farm hydroponic garden this past summer.",
-          status: "Live",
-        }
-      ];
-
-      let markers = [];
+    // Example data for specific sites (normally from a database / API)
+    const sites = [
+      {
+        id: 1,
+        name: "Fenway Farms",
+        type: "Commercial",
+        position: { lat: 42.34686667880631, lng: -71.09675646330778 },
+        description: "Read more: https://www.newsweek.com/future-urban-farming-sits-along-fenways-green-monster-1837844",
+        status: "Live",
+      },
+      {
+        id: 2,
+        name: "Osborn Triangle",
+        type: "Commercial",
+        position: { lat: 42.36178047475023, lng: -71.09382715960147 },
+        description: "Home to some of the leading pharmaceutical companies, Osborn Triangle is a premier office and lab complex located in Kendall Square’s life science hub in Cambridge, MA.\nRead more: https://greencitygrowers.com/success-stories/osborn-triangle/",
+        status: "Live",
+      },
+      {
+        id: 3,
+        name: "The Kensington",
+        type: "Residential",
+        position: { lat: 42.35198999214532, lng: -71.06327887045808},
+        description: "From the city to the shore, these multi-family residences are using their gardens as alternative gathering spaces for their communities. The Kensington, located in Chinatown in downtown Boston, installed a Grobrix indoor vegetable-growing wall just outside their apartment gym. The Cove, located in Hingham, MA, installed six raised beds in its outdoor engagement area near the pool.\nRead more: https://greencitygrowers.com/success-stories/the-kensington-and-the-cove/",
+        status: "Live",
+      },
+      {
+        id: 4,
+        name: "Headquarters",
+        position: { lat: 42.37627441687818, lng: -71.09259116048692},
+        description: "The home of Green City Growers. Located in Somerville, MA.",
+        status: "Live",
+      },
+      {
+        id: 5,
+        name: "Madison Park Technical Vocational High School",
+        type: "School",
+        position: { lat: 42.33197552203007, lng: -71.09045194003089},
+        description: "Students in the Madison Park Technical Vocational High School Special Education program debuted a Fork Farm hydroponic garden this past summer.",
+        status: "Live",
+      }
+    ];
       
-      function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-          center: { lat:  42.359958, lng: -71.084066 },
-          zoom: 13,
-          mapTypeId: "satellite",
-        });
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 42.359958, lng: -71.084066 },
+        zoom: 13,
+        mapTypeId: "satellite",
+      });
 
-        // Add markers for each site
+      // Create markers
+      sites.forEach((site) => {
+        // Special case: no type (Headquarters) → simple marker that resets to overview
+        if (!site.type) {
+          const marker = new google.maps.Marker({
+            position: site.position,
+            map,
+            title: site.name,
+          });
 
-        sites.forEach((site) => {
-           if (!site.type) return;
-          
-          let iconUrl;
-        
-          if (site.type === "Residential") {
-            iconUrl = "residential.png";
-          } else if (site.type === "Commercial") {
-            iconUrl = "commercial.png";
-          } else if (site.type === "School") {
-            iconUrl = "school.png";
-          } else {
-            iconUrl = null; // fall back to default
-          }
+          marker.addListener("click", () => {
+            showOverviewText("all");
+          });
 
-          
-         const marker = new google.maps.Marker({
-    position: site.position,
-    map,
-    title: site.name,
-    icon: {
-      url: iconUrl,
-      scaledSize: new google.maps.Size(40, 40), // or 32, 32
-    },
-  });
-
-  marker.addListener("click", () => {
-    showSiteDetails(site);
-  });
           markers.push({ marker, site });
+          return;
+        }
+
+        // Typed sites → custom icons
+        let iconUrl;
+
+        if (site.type === "Residential") {
+          iconUrl = "residential.png";
+        } else if (site.type === "Commercial") {
+          iconUrl = "commercial.png";
+        } else if (site.type === "School") {
+          iconUrl = "school.png";
+        }
+
+        const marker = new google.maps.Marker({
+          position: site.position,
+          map,
+          title: site.name,
+          icon: {
+            url: iconUrl,
+            scaledSize: new google.maps.Size(40, 40),
+          },
         });
 
-         // CLICKING ON EMPTY MAP → RESET SIDE PANEL
-  map.addListener("click", () => {
-    showOverviewText();
-  });
-        
+        marker.addListener("click", () => {
+          showSiteDetails(site);
+        });
+
+        markers.push({ marker, site });
+      });
+
+      // Clicking on empty map → reset to overview (all)
+      map.addListener("click", () => {
+        showOverviewText("all");
+      });
+
+      // Initial side panel
+      showOverviewText("all");
+    }
+
+    function showSiteDetails(site) {
+      const descriptionHtml = (site.description || "").replace(/\n/g, "<br>");
+      const panel = document.getElementById("side-panel");
+
+      panel.innerHTML = `
+        <div class="site-title">${site.name}</div>
+        <div class="accent-bar"></div>
+        <div class="site-description">${descriptionHtml}</div>
+        <span class="site-status">${site.status || "N/A"}</span>
+      `;
+    }
+
+    // Build overview panel (including filters) and apply filter
+    function showOverviewText(selectedType = "all") {
+      const panel = document.getElementById("side-panel");
+
+      panel.innerHTML = `
+        <div class="site-title">Our Gardens</div>
+        <div class="accent-bar"></div>
+
+        <div class="site-description">
+          We have gardens all over the Boston area. Explore our different sites and
+          learn more about the communities they serve.
+        </div>
+
+        <div id="filters" class="filters">
+          <button data-filter="all" class="filter-btn">All</button>
+          <button data-filter="school" class="filter-btn">Schools</button>
+          <button data-filter="commercial" class="filter-btn">Commercial</button>
+          <button data-filter="residential" class="filter-btn">Residential</button>
+        </div>
+
+        <span class="site-status">Status: N/A</span>
+      `;
+
+      // Wire up filter buttons
+      setupFilters();
+
+      // Set active button
+      const activeBtn = panel.querySelector(
+        `.filter-btn[data-filter="${selectedType}"]`
+      );
+      if (activeBtn) {
+        panel.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        activeBtn.classList.add("active");
       }
 
-      function showSiteDetails(site) {
-  const descriptionHtml = (site.description || "").replace(/\n/g, "<br>");
+      // Apply marker filter
+      filterMarkers(selectedType);
+    }
 
-  const panel = document.getElementById("side-panel");
-  panel.innerHTML = `
-    <div class="site-title">${site.name}</div>
-    <div class="accent-bar"></div>
-    <div class="site-description">${descriptionHtml}</div>
-    <span class="site-status">${site.status || "N/A"}</span>
-  `;
-}
+    function setupFilters() {
+      const buttons = document.querySelectorAll(".filter-btn");
 
-      function setupFilters() {
-  const buttons = document.querySelectorAll(".filter-btn");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const type = btn.dataset.filter; // "all", "school", "commercial", "residential"
+          showOverviewText(type);         // rebuild panel and reapply filter
+        });
+      });
+    }
 
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      // visual active state
-      buttons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
+    function filterMarkers(type) {
+      const filterType = type.toLowerCase();
 
-      const type = btn.dataset.filter; // "all", "school", "commercial", ...
+      markers.forEach(({ marker, site }) => {
+        if (!site.type) {
+          // Headquarters: show only when "all"
+          marker.setVisible(filterType === "all");
+          return;
+        }
 
-      filterMarkers(type);
-    });
-  });
-}
-
-function filterMarkers(type) {
-  markers.forEach(({ marker, site }) => {
-    const shouldShow = type === "all" || site.type === type;
-    marker.setVisible(shouldShow);
-  });
-
-  // Optionally update side panel text when toggling
-  if (type === "all") {
-    showOverviewText();
-  } else {
-    // e.g. "Showing all School sites"
-    document.querySelector(".site-title").textContent = "Our Gardens";
-    document.querySelector(".site-description").textContent =
-      `Showing all ${type.charAt(0).toUpperCase() + type.slice(1)} sites.`;
-    document.querySelector(".site-status").textContent = "Status: N/A";
-  }
-}
-
-function showOverviewText() {
-  document.querySelector(".site-title").textContent = "Our Gardens";
-  document.querySelector(".site-description").textContent =
-    '"We have gardens all over the Boston area. Explore our different sites and learn more about the communities they serve."';
-  document.querySelector(".site-status").textContent = "Status: N/A";
-}
+        const siteType = site.type.toLowerCase(); // "commercial", etc.
+        const shouldShow = filterType === "all" || siteType === filterType;
+        marker.setVisible(shouldShow);
+      });
+    }
       
-    </script>
+  </script>
 
-    
 </body>
 
 </html>
