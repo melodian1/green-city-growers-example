@@ -198,19 +198,34 @@
         id: 3,
         name: "The Kensington",
         type: "Residential",
-        position: { lat: 42.35198999214532, lng: -71.06327887045808},
-        description: 
-          <p> "From the city to the shore, these multi-family residences are using their gardens as alternative gathering spaces for their communities.  The Kensington, located in Chinatown in downtown Boston, installed a Grobrix indoor vegetable-growing wall just outside their apartment gym. The Cove, located in Hingham, MA, installed six raised beds in its outdoor engagement area near the pool.\n\n"+
-          "Our garden’s high-quality local food production contributed to The Kensington’s LEED Gold certification, cementing their status as a place where building a greener future and a greener city are prioritized. The Cove’s outdoor gardens also support their environmental stewardship and help create a biodiverse environment in their shared outdoor space.\n\n" 
+        position: { lat: 42.35198999214532, lng: -71.06327887045808 },
+        description: `
+          <p>
+            From the city to the shore, these multi-family residences are using their gardens as alternative gathering spaces for their communities.  
+            The Kensington, located in Chinatown in downtown Boston, installed a Grobrix indoor vegetable-growing wall just outside their apartment gym. 
+            The Cove, located in Hingham, MA, installed six raised beds in its outdoor engagement area near the pool.
           </p>
-          
+      
           <img
             src="trophy.png"
-            style="max-width: 5%; border-radius: 4px; margin-top: 10px;"
-          />  <p> "Our garden’s high-quality local food production contributed to The Kensington’s LEED Gold certification, cementing their status as a place where building a greener future and a greener city are prioritized. The Cove’s outdoor gardens also support their environmental stewardship and help create a biodiverse environment in their shared outdoor space.\n\n"
-          
-      "Read more: https://greencitygrowers.com/success-stories/the-kensington-and-the-cove/"
-        </p>,
+            alt="LEED Gold trophy"
+            style="max-width: 50px; border-radius: 4px; margin-top: 10px;"
+          />
+      
+          <p>
+            Our garden’s high-quality local food production contributed to The Kensington’s LEED Gold certification, 
+            cementing their status as a place where building a greener future and a greener city are prioritized. 
+            The Cove’s outdoor gardens also support their environmental stewardship and help create a biodiverse 
+            environment in their shared outdoor space.
+          </p>
+      
+          <p>
+            <strong>Read more:</strong>
+            <a href="https://greencitygrowers.com/success-stories/the-kensington-and-the-cove/" target="_blank">
+              The Kensington &amp; The Cove
+            </a>
+          </p>
+        `,
         status: "Live",
       },
       {
@@ -293,13 +308,14 @@
     }
 
     function showSiteDetails(site) {
-      const descriptionHtml = (site.description || "").replace(/\n/g, "<br>");
       const panel = document.getElementById("side-panel");
-
+    
       panel.innerHTML = `
         <div class="site-title">${site.name}</div>
         <div class="accent-bar"></div>
-        <div class="site-description">${descriptionHtml}</div>
+        <div class="site-description">
+          ${site.description || ""}
+        </div>
       `;
     }
 
